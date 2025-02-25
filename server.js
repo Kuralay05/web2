@@ -4,10 +4,14 @@ const dotenv = require('dotenv');
 const path = require('path');
 const helmet = require('helmet');
 
+
+const userRoutes = require('./routes/users'); // Добавляем новый маршрут
+app.use('/users', userRoutes);
+
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 app.use(helmet());
 app.use(express.json());
@@ -27,5 +31,10 @@ const blogRoutes = require('./routes/blogs');
 
 app.use('/auth', authRoutes);
 app.use('/blogs', blogRoutes);
+
+const errorMiddleware = require('./middleware/errorMiddleware');
+
+app.use(errorMiddleware); // Глобальный обработчик ошибок
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
