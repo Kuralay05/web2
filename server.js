@@ -13,14 +13,14 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Подключаем EJS для рендеринга страниц
+// 📌 Подключаем EJS для рендеринга страниц
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Раздаём статические файлы (CSS, изображения)
+// 📌 Подключаем статические файлы (CSS)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Подключаем MongoDB
+// 📌 Подключаем MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -28,22 +28,32 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB Connection Error:', err));
 
-// Подключаем маршруты
-const userRoutes = require('./routes/users');
+// 📌 Подключаем маршруты API
 const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blogs');
-
-app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/blogs', blogRoutes);
 
-// 📌 **Главная страница (рендеринг EJS)**
+// 📌 Главная страница
 app.get('/', (req, res) => {
     res.render('index', { title: "Welcome to My Blog" });
 });
 
-// Обработчик ошибок
-const errorMiddleware = require('./middleware/errorMiddleware');
-app.use(errorMiddleware);
+// 📌 Страница регистрации
+app.get('/auth/register', (req, res) => {
+    res.render('register', { title: "Register" });
+});
 
+// 📌 Страница логина
+app.get('/auth/login', (req, res) => {
+    res.render('login', { title: "Login" });
+});
+
+// 📌 Обработчик ошибок
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send("Something went wrong!");
+});
+
+// 📌 Запуск сервера
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
