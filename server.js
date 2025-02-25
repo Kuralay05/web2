@@ -1,16 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const path = require('path');
 const helmet = require('helmet');
-
-
-const userRoutes = require('./routes/users'); // Добавляем новый маршрут
-app.use('/users', userRoutes);
+const path = require('path');
 
 dotenv.config();
 
-const app = express();
+const app = express(); // <-- Сначала создаём `app`
 const PORT = process.env.PORT || 5000;
 
 app.use(helmet());
@@ -25,16 +21,17 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB Connection Error:', err));
 
-// Маршруты
+// Импорт маршрутов (только после объявления `app`)
+const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blogs');
 
+app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/blogs', blogRoutes);
 
+// Обработчик ошибок (должен быть в конце)
 const errorMiddleware = require('./middleware/errorMiddleware');
-
-app.use(errorMiddleware); // Глобальный обработчик ошибок
-
+app.use(errorMiddleware);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
