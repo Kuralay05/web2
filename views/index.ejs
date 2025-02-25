@@ -1,6 +1,16 @@
 <% layout = "layout" %>
-<section>
-    <h2>Welcome to My Blog App!</h2>
-    <p>Explore and share your thoughts with the world.</p>
-    <a href="/blogs" class="button">View Blogs</a>
+<section class="dashboard">
+    <h2>Welcome, <%= user ? user.username : "Guest" %>!</h2>
+
+    <% if (user) { %>
+        <p>You are logged in as <strong><%= user.username %></strong></p>
+        <a href="/blogs" class="button">View Blogs</a>
+        <a href="/blogs/new" class="button">Create New Blog</a>
+        <a href="/auth/logout" class="button logout">Logout</a>
+    <% } else { %>
+        <p>Welcome to our blog platform. Please log in or register to continue.</p>
+        <a href="/auth/login" class="button">Login</a>
+        <a href="/auth/register" class="button">Register</a>
+        <a href="/blogs" class="button">View Blogs</a>
+    <% } %>
 </section>

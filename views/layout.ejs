@@ -11,8 +11,13 @@
         <nav>
             <a href="/">Home</a>
             <a href="/blogs">Blogs</a>
-            <a href="/auth/register">Register</a>
-            <a href="/auth/login">Login</a>
+            <% if (user) { %>
+                <a href="/blogs/new">Create Blog</a>
+                <a href="/auth/logout">Logout</a>
+            <% } else { %>
+                <a href="/auth/register">Register</a>
+                <a href="/auth/login">Login</a>
+            <% } %>
         </nav>
     </header>
     <main>

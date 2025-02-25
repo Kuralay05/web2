@@ -36,8 +36,9 @@ app.use('/blogs', blogRoutes);
 
 // 📌 Главная страница
 app.get('/', (req, res) => {
-    res.render('index', { title: "Welcome to My Blog" });
+  res.render('index', { title: "Welcome to My Blog", user: req.session.user });
 });
+
 
 // 📌 Страница регистрации
 app.get('/auth/register', (req, res) => {
