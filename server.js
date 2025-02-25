@@ -13,7 +13,14 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Подключение к MongoDB
+// Подключаем EJS для рендеринга страниц
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Раздаём статические файлы (CSS, изображения)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Подключаем MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -21,7 +28,7 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB Connection Error:', err));
 
-// 🔹 Подключаем маршруты (важно! должно быть **после** app.use(express.json()))
+// Подключаем маршруты
 const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blogs');
@@ -30,9 +37,9 @@ app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/blogs', blogRoutes);
 
-// ✅ Корневой маршрут, чтобы проверить работу сервера
+// 📌 **Главная страница (рендеринг EJS)**
 app.get('/', (req, res) => {
-    res.send('Server is running! 🚀');
+    res.render('index', { title: "Welcome to My Blog" });
 });
 
 // Обработчик ошибок
