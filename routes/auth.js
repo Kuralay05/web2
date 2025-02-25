@@ -3,9 +3,11 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const validateMiddleware = require('../middleware/validateMiddleware'); // ✅ Добавили
+const { registerSchema, loginSchema } = require('../middleware/schemas'); // ✅ Добавили
 
-// 📌 Регистрация
-router.post('/register', async (req, res) => {
+// 📌 Регистрация с валидацией
+router.post('/register', validateMiddleware(registerSchema), async (req, res) => {
     const { username, password, email } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -20,10 +22,6 @@ router.post('/register', async (req, res) => {
     }
 });
 
-module.exports = router;
-
-
-
 // 📌 Логин с валидацией
 router.post('/login', validateMiddleware(loginSchema), async (req, res) => {
     const { username, password } = req.body;
@@ -36,7 +34,6 @@ router.post('/login', validateMiddleware(loginSchema), async (req, res) => {
             res.status(401).json({ error: "Invalid username or password" });
         }
     } catch (err) {
-        console.error(err);
         res.status(500).json({ error: "Login failed" });
     }
 });
