@@ -1,0 +1,34 @@
+<%- include('partials/header', { title: blog.title, user: user }) %>
+<h1><%= blog.title %></h1>
+<p><%= blog.body %></p>
+<p>Author: <%= blog.author.username %></p>
+<p>Created at: <%= new Date(blog.createdAt).toLocaleString() %></p>
+<p>
+  <% if (blog.author._id.toString() === user._id.toString()) { %>
+    <a href="/blogs/<%= blog._id %>/edit">Edit</a> |
+    <form action="/blogs/<%= blog._id %>?_method=DELETE" method="POST" style="display:inline;">
+      <button type="submit">Delete</button>
+    </form>
+  <% } %>
+</p>
+<hr>
+<h2>Comments</h2>
+<% if (blog.comments.length === 0) { %>
+  <p>No comments yet.</p>
+<% } else { %>
+  <ul>
+    <% blog.comments.forEach(comment => { %>
+      <li>
+        <p><%= comment.text %></p>
+        <small>by <%= comment.commentedBy ? comment.commentedBy.username : 'Anonymous' %> on <%= new Date(comment.createdAt).toLocaleString() %></small>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+<h3>Add a Comment</h3>
+<form action="/blogs/<%= blog._id %>/comments" method="POST">
+  <textarea name="commentText" required></textarea><br>
+  <button type="submit">Submit Comment</button>
+</form>
+<%- include('partials/footer') %>
+

@@ -1,0 +1,17 @@
+<%- include('partials/header', { title: blog._id ? 'Edit Blog' : 'New Blog', user: user }) %>
+<h1><%= blog._id ? 'Edit Blog' : 'Create New Blog' %></h1>
+<% if (typeof error !== 'undefined') { %>
+  <p class="error"><%= error %></p>
+<% } %>
+<form action="<%= action %>" method="POST">
+  <% if (blog._id) { %>
+    <input type="hidden" name="_method" value="PUT">
+  <% } %>
+  <label>Title:</label><br>
+  <input type="text" name="title" value="<%= blog.title || '' %>" required><br>
+  <label>Body:</label><br>
+  <textarea name="body" rows="10" required><%= blog.body || '' %></textarea><br>
+  <button type="submit"><%= blog._id ? 'Update' : 'Create' %></button>
+</form>
+<%- include('partials/footer') %>
+

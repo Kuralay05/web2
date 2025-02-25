@@ -1,0 +1,7 @@
+<%- include('partials/header', { title: 'Enable 2FA', user: user }) %>
+<h1>Enable Two-Factor Authentication</h1>
+<p>Scan the QR code below with your authenticator app:</p>
+<img src="<%= qrCode %>" alt="QR Code">
+<p>After scanning, please login again.</p>
+<%- include('partials/footer') %>
+

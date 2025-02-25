@@ -1,0 +1,11 @@
+<%- include('partials/header', { title: 'Verify OTP', user: null }) %>
+<h1>Verify OTP</h1>
+<% if (typeof error !== 'undefined') { %>
+  <p class="error"><%= error %></p>
+<% } %>
+<form action="/verify-otp" method="POST">
+  <label>Enter OTP: <input type="text" name="token" required></label><br>
+  <button type="submit">Verify</button>
+</form>
+<%- include('partials/footer') %>
+

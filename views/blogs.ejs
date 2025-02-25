@@ -1,0 +1,21 @@
+<%- include('partials/header', { title: 'Blogs', user: user }) %>
+<h1>Blogs</h1>
+<form action="/blogs" method="GET">
+  <input type="text" name="keyword" placeholder="Search blogs" value="<%= keyword %>">
+  <button type="submit">Search</button>
+</form>
+<p><a href="/blogs/new">Create New Blog</a></p>
+<% if (blogs.length === 0) { %>
+  <p>No blogs found.</p>
+<% } else { %>
+  <ul>
+    <% blogs.forEach(blog => { %>
+      <li>
+        <a href="/blogs/<%= blog._id %>"><%= blog.title %></a>
+        <small>by <%= blog.author.username %></small>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+<%- include('partials/footer') %>
+

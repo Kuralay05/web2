@@ -1,0 +1,9 @@
+<%- include('partials/header', { title: 'Dashboard', user: user }) %>
+<h1>Welcome, <%= user.username %>!</h1>
+<p>This is your dashboard.</p>
+<p>
+  <a href="/blogs">View Blogs</a> | 
+  <a href="/enable-2fa">Enable 2FA</a>
+</p>
+<%- include('partials/footer') %>
+
