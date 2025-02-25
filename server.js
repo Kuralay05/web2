@@ -6,7 +6,7 @@ const path = require('path');
 
 dotenv.config();
 
-const app = express(); // <-- Сначала создаём `app`
+const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(helmet());
@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB Connection Error:', err));
 
-// Импорт маршрутов (только после объявления `app`)
+// 🔹 Подключаем маршруты (важно! должно быть **после** app.use(express.json()))
 const userRoutes = require('./routes/users');
 const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blogs');
@@ -30,7 +30,12 @@ app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/blogs', blogRoutes);
 
-// Обработчик ошибок (должен быть в конце)
+// ✅ Корневой маршрут, чтобы проверить работу сервера
+app.get('/', (req, res) => {
+    res.send('Server is running! 🚀');
+});
+
+// Обработчик ошибок
 const errorMiddleware = require('./middleware/errorMiddleware');
 app.use(errorMiddleware);
 

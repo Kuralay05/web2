@@ -3,11 +3,9 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const validateMiddleware = require('../middleware/validateMiddleware');
-const { registerSchema, loginSchema } = require('../middleware/schemas');
 
-// 📌 Регистрация с валидацией
-router.post('/register', validateMiddleware(registerSchema), async (req, res) => {
+// 📌 Регистрация
+router.post('/register', async (req, res) => {
     const { username, password, email } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -18,10 +16,13 @@ router.post('/register', validateMiddleware(registerSchema), async (req, res) =>
 
         res.status(201).json({ message: "User registered", token });
     } catch (err) {
-        console.error(err);
         res.status(500).json({ error: "Registration failed" });
     }
 });
+
+module.exports = router;
+
+
 
 // 📌 Логин с валидацией
 router.post('/login', validateMiddleware(loginSchema), async (req, res) => {
